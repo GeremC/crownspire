@@ -8,29 +8,43 @@ export default function Login({ onLogin }) {
 
   async function handleSignUp() {
     const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
-      email,
-      password,
+        email,
+        password,
     });
 
     if (signUpError) return alert(signUpError.message);
 
-    // attendre que l'utilisateur soit confirmé (ou appeler le profil plus tard)
-    const userId = signUpData?.user?.id;
-    if (userId) {
-      await supabase.from('profiles').insert({
-        id: userId,
-        username: username || 'Inconnu',
-      });
-    }
+    // On attend que l’utilisateur confirme son email (système Supabase)
+    alert("Inscription réussie ! Vérifie ton email pour confirmer ton compte.");
+}
 
-    alert('Inscription réussie ! Vérifie tes emails.');
-  }
 
   async function handleSignIn() {
-    const { error } = await supabase.auth.signInWithPassword({ email, password });
+    const { data, error } = await supabase.auth.signInWithPassword({ email, password });
     if (error) return alert(error.message);
-    onLogin(); // déclenche le chargement du dashboard
-  }
+
+    const userId = data.user.id;
+
+    // Vérifie si le profil existe déjà
+    const { data: existingProfile } = await supabase
+        .from('profiles')
+        .select('id')
+        .eq('id', userId)
+        .single();
+
+    if (!existingProfile) {
+        await supabase.from('profiles').insert({
+        id: userId,
+        username: username || 'Inconnu',
+        rank: 1,
+        level: 1,
+        stats: { atk: 1, def: 1, hp: 10 }
+        });
+    }
+
+    onLogin(); // Redirige vers le dashboard
+    }
+
 
   return (
     <div className="p-4">
