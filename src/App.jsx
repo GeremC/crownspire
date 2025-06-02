@@ -31,10 +31,18 @@ export default function App() {
   }
 
   if (page === 'login') {
-    return <LoginForm onLogin={() => setConnected(true)} onBack={() => setPage('welcome')} />;
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <LoginForm onLogin={() => setConnected(true)} onBack={() => setPage('welcome')} />
+      </div>
+    );
   }
 
   if (page === 'signup') {
-    return <SignUpForm onBack={() => setPage('welcome')} />;
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <SignUpForm onBack={() => setPage('welcome')} />
+      </div>
+    );
   }
 }

@@ -15,14 +15,13 @@ export default function LoginForm({ onBack }) {
     if (!user) return;
 
     // Vérifie si le profil existe déjà
-    const { data: profile, error: profileError } = await supabase
+    const { data: profile } = await supabase
       .from('profiles')
       .select('*')
       .eq('id', user.id)
       .single();
 
     if (!profile) {
-      // Crée le profil si inexistant
       await supabase.from('profiles').insert({
         id: user.id,
         username: user.email.split('@')[0],
@@ -36,14 +35,17 @@ export default function LoginForm({ onBack }) {
     }
 
     alert("Connexion réussie !");
-    // Redirige ou autre logique ici
+    if (onLogin) onLogin(); // ← Ajoute ceci
   }
 
   return (
-    <form onSubmit={handleLogin}>
+    <form onSubmit={handleLogin} className="flex flex-col gap-3 max-w-md mx-auto p-6 bg-white rounded shadow">
+      <button type="button" className="mb-4 text-blue-600 underline" onClick={onBack}>
+        ← Retour
+      </button>
       <input type="email" placeholder="Email" onChange={e => setEmail(e.target.value)} required />
       <input type="password" placeholder="Mot de passe" onChange={e => setPassword(e.target.value)} required />
-      <button type="submit">Se connecter</button>
+      <button type="submit" className="bg-blue-600 text-white px-4 py-2 rounded">Se connecter</button>
     </form>
   );
 }
