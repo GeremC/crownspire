@@ -18,7 +18,10 @@ export default function SignUpForm({ onBack }) {
         username: username || 'Inconnu',
         rank: 1,
         level: 1,
-        stats: { atk: 1, def: 1, hp: 10 }
+        experience: 0,
+        stats: { atk: 1, def: 1, hp: 10 },
+        equipments: {},
+        created_at: new Date().toISOString()
       });
     }
 
