@@ -1,7 +1,8 @@
+// Exemple à placer dans LoginForm.jsx (ou équivalent)
 import { useState } from 'react';
 import { supabase } from './supabaseClient';
 
-export default function LoginForm({ onLogin, onBack }) {
+export default function LoginForm({ onBack }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
@@ -10,21 +11,39 @@ export default function LoginForm({ onLogin, onBack }) {
     const { data, error } = await supabase.auth.signInWithPassword({ email, password });
     if (error) return alert(error.message);
 
-    // Gestion du profil comme avant...
+    const user = data.user;
+    if (!user) return;
 
-    onLogin();
+    // Vérifie si le profil existe déjà
+    const { data: profile, error: profileError } = await supabase
+      .from('profiles')
+      .select('*')
+      .eq('id', user.id)
+      .single();
+
+    if (!profile) {
+      // Crée le profil si inexistant
+      await supabase.from('profiles').insert({
+        id: user.id,
+        username: user.email.split('@')[0],
+        rank: 1,
+        level: 1,
+        experience: 0,
+        stats: { atk: 1, def: 1, hp: 10 },
+        equipment: {},
+        created_at: new Date().toISOString()
+      });
+    }
+
+    alert("Connexion réussie !");
+    // Redirige ou autre logique ici
   }
 
   return (
-    <div className="max-w-md mx-auto p-6 bg-white rounded shadow">
-      <button className="mb-4 text-blue-600 underline" onClick={onBack}>
-        ← Retour
-      </button>
-      <form onSubmit={handleLogin} className="flex flex-col gap-3">
-        <input type="email" placeholder="Email" onChange={e => setEmail(e.target.value)} required />
-        <input type="password" placeholder="Mot de passe" onChange={e => setPassword(e.target.value)} required />
-        <button type="submit" className="bg-blue-600 text-white px-4 py-2 rounded">Se connecter</button>
-      </form>
-    </div>
+    <form onSubmit={handleLogin}>
+      <input type="email" placeholder="Email" onChange={e => setEmail(e.target.value)} required />
+      <input type="password" placeholder="Mot de passe" onChange={e => setPassword(e.target.value)} required />
+      <button type="submit">Se connecter</button>
+    </form>
   );
 }
