@@ -8,7 +8,13 @@ export default function SignUpForm({ onBack }) {
 
   async function handleSignUp(e) {
     e.preventDefault();
-    const { data, error } = await supabase.auth.signUp({ email, password });
+    const { data, error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+        data: { username } // Ajoute le username dans les metadata
+        }
+    });
     if (error) return alert(error.message);
 
     // Créer le profil avec username après inscription réussie

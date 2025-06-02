@@ -22,16 +22,21 @@ export default function LoginForm({ onBack }) {
       .single();
 
     if (!profile) {
-      await supabase.from('profiles').insert({
-        id: user.id,
-        username: user.email.split('@')[0],
-        rank: 1,
-        level: 1,
-        experience: 0,
-        stats: { atk: 1, def: 1, hp: 10 },
-        equipment: {},
-        created_at: new Date().toISOString()
-      });
+        // Récupère le username depuis les metadata, sinon fallback sur l'email
+        const username =
+            user.user_metadata?.username ||
+            user.email.split('@')[0];
+
+        await supabase.from('profiles').insert({
+            id: user.id,
+            username,
+            rank: 1,
+            level: 1,
+            experience: 0,
+            stats: { atk: 1, def: 1, hp: 10 },
+            equipment: {},
+            created_at: new Date().toISOString()
+        });
     }
 
     alert("Connexion réussie !");
