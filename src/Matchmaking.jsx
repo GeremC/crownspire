@@ -86,12 +86,6 @@ export default function Matchmaking({ userId, onLogout }) {
           <p>ELO : {opponent.elo}</p>
         </div>
       )}
-      <button
-        className="px-4 py-2 bg-red-600 text-white rounded"
-        onClick={onLogout}
-      >
-        Déconnexion
-      </button>
     </div>
   );
 }
