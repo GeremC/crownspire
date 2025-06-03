@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { supabase } from './supabaseClient'; // ← AJOUTE CETTE LIGNE
 import LoginForm from './LoginForm';
 import SignUpForm from './SignUpForm';
 import Matchmaking from './Matchmaking';
