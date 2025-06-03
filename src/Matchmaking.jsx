@@ -65,6 +65,18 @@ export default function Matchmaking({ userId }) {
         </button>
       )}
 
+      {searching && (
+        <button
+          className="px-6 py-2 bg-red-600 text-white rounded"
+          onClick={() => {
+            setSearching(false);
+            setStatus('Recherche arrêtée.');
+          }}
+        >
+          Arrêter la recherche
+        </button>
+      )}
+
       {status && <p className="text-lg">{status}</p>}
 
       {opponent && (
