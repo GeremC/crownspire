@@ -9,27 +9,13 @@ export default function SignUpForm({ onBack }) {
   async function handleSignUp(e) {
     e.preventDefault();
     const { data, error } = await supabase.auth.signUp({
-        email,
-        password,
-        options: {
-        data: { username } // Ajoute le username dans les metadata
-        }
+      email,
+      password,
+      options: {
+        data: { username }
+      }
     });
     if (error) return alert(error.message);
-
-    // Créer le profil avec username après inscription réussie
-    if (data.user) {
-      await supabase.from('profiles').insert({
-        id: data.user.id,
-        username: username || 'Inconnu',
-        rank: 1,
-        level: 1,
-        experience: 0,
-        stats: { atk: 1, def: 1, hp: 10 },
-        equipments: {},
-        created_at: new Date().toISOString()
-      });
-    }
 
     alert("Inscription réussie ! Vérifie ton email.");
     onBack();
