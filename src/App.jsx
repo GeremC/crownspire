@@ -1,13 +1,29 @@
-import { useState } from 'react';
-import LoginForm from './LoginForm';
-import SignUpForm from './SignUpForm';
+import { useEffect, useState } from 'react';
+import { supabase } from './supabaseClient';
+import Matchmaking from './Matchmaking';
 
 export default function App() {
-  const [page, setPage] = useState('welcome'); // 'welcome' | 'login' | 'signup'
+  const [page, setPage] = useState('welcome');
   const [connected, setConnected] = useState(false);
+  const [userId, setUserId] = useState(null);
 
-  if (connected) {
-    return <div>Bienvenue dans le jeu ! {/* Ici ton dashboard */}</div>;
+  useEffect(() => {
+    supabase.auth.getUser().then(res => {
+      const id = res.data?.user?.id;
+      if (id) {
+        setUserId(id);
+        setConnected(true);
+      }
+    });
+  }, []);
+
+  if (connected && userId) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-screen gap-6">
+        <h2 className="text-3xl font-bold">Bienvenue dans Crownspire</h2>
+        <Matchmaking userId={userId} />
+      </div>
+    );
   }
 
   if (page === 'welcome') {
