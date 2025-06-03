@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { supabase } from './supabaseClient'; // ← AJOUTE CETTE LIGNE
+import { supabase } from './supabaseClient';
 import LoginForm from './LoginForm';
 import SignUpForm from './SignUpForm';
 import Matchmaking from './Matchmaking';
@@ -19,11 +19,25 @@ export default function App() {
     });
   }, []);
 
+  // Fonction de déconnexion
+  async function handleLogout() {
+    await supabase.auth.signOut();
+    setConnected(false);
+    setUserId(null);
+    setPage('welcome');
+  }
+
   if (connected && userId) {
     return (
       <div className="flex flex-col items-center justify-center min-h-screen gap-6">
+        <button
+          className="self-end mb-4 px-4 py-2 bg-red-600 text-white rounded"
+          onClick={handleLogout}
+        >
+          Déconnexion
+        </button>
         <h2 className="text-3xl font-bold">Bienvenue dans Crownspire</h2>
-        <Matchmaking userId={userId} />
+        <Matchmaking userId={userId} onLogout={handleLogout} />
       </div>
     );
   }

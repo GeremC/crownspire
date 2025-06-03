@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { supabase } from './supabaseClient';
 
-export default function Matchmaking({ userId }) {
+export default function Matchmaking({ userId, onLogout }) {
   const [searching, setSearching] = useState(false);
   const [opponent, setOpponent] = useState(null);
   const [status, setStatus] = useState('');
@@ -86,6 +86,12 @@ export default function Matchmaking({ userId }) {
           <p>ELO : {opponent.elo}</p>
         </div>
       )}
+      <button
+        className="px-4 py-2 bg-red-600 text-white rounded"
+        onClick={onLogout}
+      >
+        Déconnexion
+      </button>
     </div>
   );
 }
