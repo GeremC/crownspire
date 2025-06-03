@@ -1,5 +1,6 @@
-import { useEffect, useState } from 'react';
-import { supabase } from './supabaseClient';
+import { useState } from 'react';
+import LoginForm from './LoginForm';
+import SignUpForm from './SignUpForm';
 import Matchmaking from './Matchmaking';
 
 export default function App() {
