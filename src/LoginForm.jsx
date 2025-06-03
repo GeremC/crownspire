@@ -30,7 +30,7 @@ export default function LoginForm({ onLogin, onBack }) {
         await supabase.from('profiles').insert({
             id: user.id,
             username,
-            rank: 1,
+            elo: 1000,
             level: 1,
             experience: 0,
             stats: { atk: 1, def: 1, hp: 10 },
