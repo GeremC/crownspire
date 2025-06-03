@@ -65,7 +65,13 @@ export default function App() {
   if (page === 'login') {
     return (
       <div className="flex items-center justify-center min-h-screen">
-        <LoginForm onLogin={() => setConnected(true)} onBack={() => setPage('welcome')} />
+        <LoginForm
+          onLogin={(user) => {
+            setConnected(true);
+            setUserId(user.id); // <-- Ajoute cette ligne
+          }}
+          onBack={() => setPage('welcome')}
+        />
       </div>
     );
   }
