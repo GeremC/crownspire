@@ -8,15 +8,15 @@ export default function App() {
   const [connected, setConnected] = useState(false);
   const [userId, setUserId] = useState(null);
 
-  useEffect(() => {
-    supabase.auth.getUser().then(res => {
-      const id = res.data?.user?.id;
-      if (id) {
-        setUserId(id);
-        setConnected(true);
-      }
-    });
-  }, []);
+  // useEffect(() => {
+  //   supabase.auth.getUser().then(res => {
+  //     const id = res.data?.user?.id;
+  //     if (id) {
+  //       setUserId(id);
+  //       setConnected(true);
+  //     }
+  //   });
+  // }, []);
 
   if (connected && userId) {
     return (
